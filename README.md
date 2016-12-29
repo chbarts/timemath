@@ -1,11 +1,17 @@
 Trivial time arithmetic code.
 
 Usage:
+
     % timemath 4:30 + 90
+
     0:0:6:0
+
     % timemath 3:0:0:0 - 24:0:0
+
     2:0:0:0
+
     % timemath 90
+
     0:0:1:30
 
 Format: days:hours:minutes:seconds
