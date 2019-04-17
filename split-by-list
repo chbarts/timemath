@@ -27,6 +27,6 @@ echo ffmpeg -v quiet -y -i "'$INPUT'" -ss $lt -t $d -codec:a libmp3lame -ac 2 -a
 lt=$n
 ln=${(S)m//${~sub}/$rep}
 fi
-done < list
+done < "$2"
 
 echo ffmpeg -v quiet -y -i "'$INPUT'" -ss $lt -codec:a libmp3lame -ac 2 -ar 44100 -ab 128k "'$ln.mp3'"
