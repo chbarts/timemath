@@ -1,0 +1,32 @@
+#!/usr/bin/env zsh
+lt=''
+ln=''
+
+if [[ $# -ne 2 ]]; then
+    echo "$0 INPUT_FILE TRACK_LIST > script" >> /dev/stderr
+    echo "TRACK_LIST is a text file with one record per line of the form: timestamp SEP track name" >> /dev/stderr
+    echo "timestamp is when the track starts, in HH:MM:SS" >> /dev/stderr
+    echo "SEP is any nonwhitespace separator character" >> /dev/stderr
+    exit 0
+fi
+
+sub="'"
+rep="'\\''"
+
+ifn=$1
+INPUT=${(S)ifn//${~sub}/$rep}
+
+while read n x m
+do
+if [[ -z $lt ]]; then
+lt=$n
+ln=${(S)m//${~sub}/$rep}
+else
+d=$(timemath $n - $lt | sed 's/0://g')
+echo ffmpeg -v quiet -y -i "'$INPUT'" -ss $lt -t $d -codec:a libmp3lame -ac 2 -ar 44100 -ab 128k "'$ln.mp3'"
+lt=$n
+ln=${(S)m//${~sub}/$rep}
+fi
+done < list
+
+echo ffmpeg -v quiet -y -i "'$INPUT'" -ss $lt -codec:a libmp3lame -ac 2 -ar 44100 -ab 128k "'$ln.mp3'"
