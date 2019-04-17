@@ -78,7 +78,7 @@ static void strtotime(char str[], time * time)
 
 static void showtime(time * time)
 {
-    printf("%llu:%llu:%llu:%llu", (ull) time->d, (ull) time->h,
+    printf("%llu:%02llu:%02llu:%02llu", (ull) time->d, (ull) time->h,
            (ull) time->m, (ull) time->s);
 }
 
