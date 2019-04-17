@@ -14,7 +14,7 @@ Usage:
 
     01:30
 
-Output Format: days:hours:minutes:seconds or minutes:seconds if days and hours are both zero
+Output Format: days:hours:minutes:seconds or hours:minutes:seconds if days is zero or minutes:seconds if days and hours are both zero
 
 Input Format: days:hours:minutes:seconds
 
