@@ -78,11 +78,11 @@ static void strtotime(char str[], time * time)
 
 static void showtime(time * time)
 {
-    if (time->d > 0)
-        printf("%llu:", (ull) time->d);
-
-    if (time->h > 0)
+    if (time->d > 0) {
+        printf("%llu:%02llu:", (ull) time->d, (ull) time->h);
+    } else if (time->h > 0) {
         printf("%02llu:", (ull) time->h);
+    }
 
     printf("%02llu:%02llu", (ull) time->m, (ull) time->s);
 }
