@@ -22,7 +22,7 @@ if [[ -z $lt ]]; then
 lt=$n
 ln=${(S)m//${~sub}/$rep}
 else
-d=$(timemath $n - $lt | sed 's/0://g')
+d=$(timemath $n - $lt)
 echo ffmpeg -v quiet -y -i "'$INPUT'" -ss $lt -t $d -codec:a libmp3lame -ac 2 -ar 44100 -ab 128k "'$ln.mp3'"
 lt=$n
 ln=${(S)m//${~sub}/$rep}
