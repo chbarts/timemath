@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
@@ -131,10 +132,10 @@ int main(int argc, char *argv[])
     }
 
     if (!strcmp(argv[1], "-h")) {
-        if (2 == argv) {
+        if (2 == argc) {
             usage();
             exit(EXIT_SUCCESS);
-        } else if (argv != 5) {
+        } else if (argc != 5) {
             fprintf(stderr, "timemath: invalid number of arguments\n");
             usage();
             exit(EXIT_FAILURE);
