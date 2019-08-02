@@ -165,12 +165,12 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    if ((4 == argc)
+    if ((((1 == first_time) ? 4 : 5) == argc)
         && ((argv[first_time + 1][0] != '+')
             && (argv[first_time + 1][0] != '-'))) {
         fprintf(stderr,
                 "timemath: invalid second argument %s, must be + or -\n",
-                argv[2]);
+                argv[first_time + 1]);
         usage();
         exit(EXIT_FAILURE);
     }
