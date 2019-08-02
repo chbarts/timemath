@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 
     strtotime(argv[first_time], time1);
 
-    if (4 == argc) {
+    if (((1 == first_time) ? 4 : 5) == argc) {
         if ((time2 = mktime()) == NULL) {
             fprintf(stderr, "timemath: memory error!\n");
             exit(EXIT_FAILURE);
