@@ -76,12 +76,20 @@ static void strtotime(char str[], time * time)
     totime(res, time);
 }
 
-static void showtime(time * time)
+static void showtime(time * time, bool day)
 {
+    uint64_t hour = time->h;
+
     if (time->d > 0) {
-        printf("%llu:%02llu:", (ull) time->d, (ull) time->h);
-    } else if (time->h > 0) {
-        printf("%02llu:", (ull) time->h);
+        if (day) {
+            printf("%llu:%02llu:", (ull) time->d, (ull) time->h);
+        } else {
+            hour += time->d * 24;
+        }
+    }
+
+    if (hour > 0) {
+        printf("%02llu:", (ull) hour);
     }
 
     printf("%02llu:%02llu", (ull) time->m, (ull) time->s);
@@ -95,6 +103,7 @@ static void usage(void)
     puts("Two colons side-by-side are taken to mean a zero in that spot, and extra numbers are ignored");
     puts("No leading colons");
     puts("");
+    puts("-h        Hours are the largest time unit printed. For example, 20:00:00 + 5:00:00 prints 25:00:00, not 1:01:00:00");
     puts("--help    This help");
     puts("--version Version information");
 }
@@ -111,6 +120,8 @@ static void version(void)
 int main(int argc, char *argv[])
 {
     time *time1 = NULL, *time2 = NULL;
+    int first_time = 1;
+    bool day = true;
     uint64_t s1, s2;
     int64_t tmp;
 
@@ -119,7 +130,19 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    if ((argc > 2) && (argc != 4)) {
+    if (!strcmp(argv[1], "-h")) {
+        if (2 == argv) {
+            usage();
+            exit(EXIT_SUCCESS);
+        } else if (argv != 5) {
+            fprintf(stderr, "timemath: invalid number of arguments\n");
+            usage();
+            exit(EXIT_FAILURE);
+        }
+
+        first_time = 2;
+        day = false;
+    } else if ((argc > 2) && (argc != 4)) {
         fprintf(stderr, "timemath: invalid number of arguments\n");
         usage();
         exit(EXIT_FAILURE);
@@ -135,13 +158,15 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    if (!isdigit(argv[1][0])) {
+    if (!isdigit(argv[first_time][0])) {
         fprintf(stderr, "timemath: invalid option %s\n", argv[1]);
         usage();
         exit(EXIT_FAILURE);
     }
 
-    if ((4 == argc) && ((argv[2][0] != '+') && (argv[2][0] != '-'))) {
+    if ((4 == argc)
+        && ((argv[first_time + 1][0] != '+')
+            && (argv[first_time + 1][0] != '-'))) {
         fprintf(stderr,
                 "timemath: invalid second argument %s, must be + or -\n",
                 argv[2]);
@@ -154,7 +179,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    strtotime(argv[1], time1);
+    strtotime(argv[first_time], time1);
 
     if (4 == argc) {
         if ((time2 = mktime()) == NULL) {
@@ -162,12 +187,12 @@ int main(int argc, char *argv[])
             exit(EXIT_FAILURE);
         }
 
-        strtotime(argv[3], time2);
+        strtotime(argv[first_time + 2], time2);
 
         s1 = tosec(time1);
         s2 = tosec(time2);
 
-        if ('+' == argv[2][0]) {
+        if ('+' == argv[first_time + 1][0]) {
             tmp = s1 + s2;
         } else {
             tmp = s1 - s2;
@@ -182,7 +207,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    showtime(time1);
+    showtime(time1, day);
     puts("");
     free(time1);
     free(time2);
