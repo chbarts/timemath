@@ -83,14 +83,14 @@ static void showtime(time * time, bool day)
 
     if (time->d > 0) {
         if (day) {
-            printf("%llu:%02llu:", (ull) time->d, (ull) time->h);
+            printf("%llu:", (ull) time->d);
         } else {
             hour += time->d * 24;
-
-            if (hour > 0) {
-                printf("%llu:", (ull) hour);
-            }
         }
+    }
+
+    if (hour > 0) {
+        printf("%llu:", (ull) hour);
     }
 
     printf("%02llu:%02llu", (ull) time->m, (ull) time->s);
